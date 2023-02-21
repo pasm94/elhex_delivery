@@ -1,18 +1,9 @@
 defmodule ElhexDelivery do
-  @moduledoc """
-  Documentation for `ElhexDelivery`.
-  """
+  use Application
 
-  @doc """
-  Hello world.
+  def start(_type, _args) do
+    children = [ElhexDelivery.Supervisor]
 
-  ## Examples
-
-      iex> ElhexDelivery.hello()
-      :world
-
-  """
-  def hello do
-    :world
+    Supervisor.start_link(children, strategy: :one_for_one)
   end
 end
