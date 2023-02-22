@@ -1,15 +1,16 @@
 defmodule ElhexDelivery.PostalCode.Supervisor do
   use Supervisor
 
-  def start_link(_) do
-    Supervisor.start_link(__MODULE__, [])
+  def start_link(args) do
+    Supervisor.start_link(__MODULE__, args)
   end
 
-  def init(_) do
+  def init(args) do
+    args[:conf] |> IO.inspect()
     children = [
-      {ElhexDelivery.PostalCode.Store, []},
-      {ElhexDelivery.PostalCode.Navigator, []},
-      {ElhexDelivery.PostalCode.Cache, []}
+      {ElhexDelivery.PostalCode.Store, conf: args[:conf], name: {:via, ElhexDelivery.PostalCode.Store, __MODULE__}},
+      # {ElhexDelivery.PostalCode.Navigator, args},
+      # {ElhexDelivery.PostalCode.Cache, args}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

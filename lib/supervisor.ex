@@ -1,15 +1,15 @@
 defmodule ElhexDelivery.Supervisor do
   use Supervisor
 
-  def start_link(_) do
-    Supervisor.start_link(__MODULE__, [])
+  def start_link(args) do
+    Supervisor.start_link(__MODULE__, args)
   end
 
-  def init(_) do
+  def init(args) do
     children = [
-      {ElhexDelivery.PostalCode.Supervisor, []}
+      {ElhexDelivery.PostalCode.Supervisor, conf: args[:conf], name: {:via, ElhexDelivery.PostalCode.Supervisor, __MODULE__}}
     ]
 
-    Supervisor.init(children, strategy: :one_for_all)
+    Supervisor.init(children, strategy: :one_for_one)
   end
 end
